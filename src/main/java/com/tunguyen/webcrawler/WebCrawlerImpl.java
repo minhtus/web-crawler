@@ -45,18 +45,16 @@ class WebCrawlerImpl implements WebCrawler {
         return this;
     }
 
-    WebCrawlerImpl setSearchPreferences(String search) {
-        return this;
-    }
-
     @Override
     public void startCrawler() throws IOException {
+        if (extractor == null) {
+            throw new UnsupportedOperationException("Please implement Extractor and add to crawler using addExtractor(extractor)");
+        }
         String url = next();
         while (url != null && !(pagesVisited.size() > maxPages)) {
             LOGGER.info("Visiting " + url);
             try {
                 Document document = crawler.connect(url);
-                // TODO extract pages data here
                 extractor.extract(document);
                 Set<String> links = getLinks(document);
                 pagesToVisit.addAll(links);
@@ -68,7 +66,7 @@ class WebCrawlerImpl implements WebCrawler {
     }
 
     @Override
-    public WebCrawler addExtractor(Extractor extractor) {
+    public WebCrawlerImpl addExtractor(Extractor extractor) {
         this.extractor = extractor;
         return this;
     }
