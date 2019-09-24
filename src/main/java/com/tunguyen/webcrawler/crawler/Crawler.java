@@ -31,7 +31,7 @@ public class Crawler {
                 builder.append(buffer, 0, bytesRead);
             }
             String body = WellFormedUtils.wellFormedHtml(builder.toString());
-            LOGGER.info(body);
+            LOGGER.config(body);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setValidating(false);
             documentBuilderFactory.setNamespaceAware(false);
