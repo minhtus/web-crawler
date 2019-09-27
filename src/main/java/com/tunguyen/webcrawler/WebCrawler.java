@@ -25,7 +25,16 @@ public interface WebCrawler {
      */
     WebCrawler setCrawler(Crawler crawler);
 
+    /**
+     * Set User-Agent to Http Request header
+     * @param userAgent user agent value
+     */
     WebCrawler setUserAgent(String userAgent);
 
+    /**
+     * Set Request headers
+     * @param key the header name
+     * @param value the header value
+     */
     WebCrawler setRequestHeader(String key, String value);
 }

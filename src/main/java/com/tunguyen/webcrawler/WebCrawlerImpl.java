@@ -1,14 +1,16 @@
 package com.tunguyen.webcrawler;
 
 import com.tunguyen.webcrawler.crawler.Crawler;
-import com.tunguyen.webcrawler.crawler.CrawlerImpl;
 import com.tunguyen.webcrawler.extractor.Extractor;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,14 +18,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 class WebCrawlerImpl implements WebCrawler {
     private static final Logger LOGGER = Logger.getLogger(WebCrawlerImpl.class.getName());
 
     private Crawler crawler;
     private Extractor extractor;
-    private String rootPage;
     private int maxPages;
     private Set<String> pagesVisited;
     private List<String> pagesToVisit;
@@ -41,11 +41,9 @@ class WebCrawlerImpl implements WebCrawler {
     }
 
     WebCrawlerImpl setRootPage(String rootPage) {
-        this.rootPage = rootPage;
         this.pagesToVisit.add(rootPage);
         return this;
     }
-
 
     public WebCrawlerImpl setCrawler(Crawler crawler) {
         this.crawler = crawler;
@@ -74,7 +72,7 @@ class WebCrawlerImpl implements WebCrawler {
             LOGGER.info("Visiting " + url);
             try {
                 Document document = crawler.connect(url).executeRequest();
-                extractor.extract(document);
+                extractor.extractData(document);
                 Set<String> links = getLinks(document);
                 pagesToVisit.addAll(links);
             } catch (SAXException | ParserConfigurationException | FileNotFoundException e) {
@@ -100,19 +98,16 @@ class WebCrawlerImpl implements WebCrawler {
     }
 
     private Set<String> getLinks(Document document) {
-        NodeList list = document.getElementsByTagName("a");
         Set<String> links = new HashSet<>();
-        for (int i = 0; i < list.getLength(); i++) {
-            Node node = list.item(i);
-            Node href = node.getAttributes().getNamedItem("href");
-            if (href != null) {
-                links.add(href.getNodeValue());
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        try {
+            NodeList list = (NodeList) xPath.evaluate("//a[@href]", document, XPathConstants.NODESET);
+            for (int i = 0; i < list.getLength(); i++) {
+                links.add(list.item(i).getAttributes().getNamedItem("href").getNodeValue());
             }
+        } catch (XPathExpressionException e) {
+            LOGGER.severe(e.getMessage());
         }
-        return standardizeURL(links);
-    }
-
-    private Set<String> standardizeURL(Set<String> links) {
-        return links.parallelStream().map(link -> !link.startsWith("http") ? rootPage + link : link).collect(Collectors.toSet());
+        return extractor.extractURL(links);
     }
 }
