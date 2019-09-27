@@ -1,5 +1,6 @@
 package com.tunguyen.webcrawler;
 
+import com.tunguyen.webcrawler.crawler.Crawler;
 import com.tunguyen.webcrawler.extractor.Extractor;
 import org.xml.sax.SAXException;
 
@@ -17,4 +18,10 @@ public interface WebCrawler {
      * Init the crawling process
      */
     void startCrawler() throws ParserConfigurationException, SAXException, IOException;
+
+    /**
+     * User implement crawler
+     * @param crawler Implement crawler from @link com.tunguyen.webcrawler.crawler.Crawler
+     */
+    WebCrawler setCrawler(Crawler crawler);
 }

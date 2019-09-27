@@ -1,5 +1,7 @@
 package com.tunguyen.webcrawler;
 
+import com.tunguyen.webcrawler.crawler.CrawlerImpl;
+
 public class WebCrawlerFactory {
     /**
      * Create a WebCrawler to crawl data from specified website
@@ -10,6 +12,7 @@ public class WebCrawlerFactory {
     public static WebCrawler newCrawler(final String rootPage, final int maxPages) {
         return new WebCrawlerImpl()
                 .setRootPage(rootPage)
-                .setMaxPages(maxPages);
+                .setMaxPages(maxPages)
+                .setCrawler(new CrawlerImpl());
     }
 }

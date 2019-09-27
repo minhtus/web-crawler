@@ -1,6 +1,7 @@
 package com.tunguyen.webcrawler;
 
 import com.tunguyen.webcrawler.crawler.Crawler;
+import com.tunguyen.webcrawler.crawler.CrawlerImpl;
 import com.tunguyen.webcrawler.extractor.Extractor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 class WebCrawlerImpl implements WebCrawler {
     private static final Logger LOGGER = Logger.getLogger(WebCrawlerImpl.class.getName());
 
-    private final Crawler crawler = new Crawler();
+    private Crawler crawler;
     private Extractor extractor;
     private String rootPage;
     private int maxPages;
@@ -42,6 +43,12 @@ class WebCrawlerImpl implements WebCrawler {
     WebCrawlerImpl setRootPage(String rootPage) {
         this.rootPage = rootPage;
         this.pagesToVisit.add(rootPage);
+        return this;
+    }
+
+
+    public WebCrawlerImpl setCrawler(Crawler crawler) {
+        this.crawler = crawler;
         return this;
     }
 
