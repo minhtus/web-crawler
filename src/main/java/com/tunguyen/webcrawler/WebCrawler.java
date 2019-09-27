@@ -24,4 +24,8 @@ public interface WebCrawler {
      * @param crawler Implement crawler from @link com.tunguyen.webcrawler.crawler.Crawler
      */
     WebCrawler setCrawler(Crawler crawler);
+
+    WebCrawler setUserAgent(String userAgent);
+
+    WebCrawler setRequestHeader(String key, String value);
 }

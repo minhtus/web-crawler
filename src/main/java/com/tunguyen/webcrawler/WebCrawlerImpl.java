@@ -53,6 +53,18 @@ class WebCrawlerImpl implements WebCrawler {
     }
 
     @Override
+    public WebCrawler setUserAgent(String userAgent) {
+        crawler.setUserAgent(userAgent);
+        return this;
+    }
+
+    @Override
+    public WebCrawler setRequestHeader(String key, String value) {
+        crawler.setRequestHeader(key, value);
+        return this;
+    }
+
+    @Override
     public void startCrawler() throws IOException {
         if (extractor == null) {
             throw new UnsupportedOperationException("Please implement Extractor and add to crawler using addExtractor(extractor)");
@@ -61,7 +73,7 @@ class WebCrawlerImpl implements WebCrawler {
         while (url != null && !(pagesVisited.size() > maxPages)) {
             LOGGER.info("Visiting " + url);
             try {
-                Document document = crawler.connect(url);
+                Document document = crawler.connect(url).executeRequest();
                 extractor.extract(document);
                 Set<String> links = getLinks(document);
                 pagesToVisit.addAll(links);
