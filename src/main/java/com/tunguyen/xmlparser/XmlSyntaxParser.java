@@ -253,7 +253,7 @@ class XmlSyntaxParser {
                             .replace("\"", "&quot;")
                             .replace("'", "&apos;")
                             .replace("<", "&lt;")
-                            .replace(">", "&qt;");
+                            .replace(">", "&gt;");
 
                     builder.append(entry.getKey())
                             .append("=")

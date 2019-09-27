@@ -39,8 +39,8 @@ public class WellFormedUtils {
      * @return removed output from source
      */
     private static String removeMiscellaneousTags(String src) {
-        return src.replaceAll("<script[\\s\\S]+</script>", "")
-                .replaceAll("<style[\\s\\S]+</style>", "")
+        return src.replaceAll("<script[^>]*>([\\s\\S]*?)</script>", "")
+                .replaceAll("<style[^>]*>([\\s\\S]*?)</style>", "")
                 .replaceAll("<!--.*?-->", "")
                 .replaceAll("&.*?;", "");
     }
