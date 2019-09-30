@@ -17,7 +17,6 @@ public abstract class WebCrawlerFactory {
         WebCrawlerFactory.rootPage = rootPage.endsWith("/") ? rootPage : rootPage + "/";
         return new WebCrawlerImpl()
                 .setRootPage(WebCrawlerFactory.rootPage)
-                .setMaxPages(maxPages)
-                .setCrawler(new CrawlerImpl());
+                .setMaxPages(maxPages);
     }
 }

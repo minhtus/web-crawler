@@ -13,16 +13,14 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 class WebCrawlerImpl implements WebCrawler {
     private static final Logger LOGGER = Logger.getLogger(WebCrawlerImpl.class.getName());
+    private static final String USER_AGENT = "User-Agent";
 
-    private Crawler crawler;
+    private Map<String, String> headers;
     private Extractor extractor;
     private int maxPages;
     private Set<String> pagesVisited;
@@ -45,20 +43,21 @@ class WebCrawlerImpl implements WebCrawler {
         return this;
     }
 
-    public WebCrawlerImpl setCrawler(Crawler crawler) {
-        this.crawler = crawler;
-        return this;
-    }
-
     @Override
     public WebCrawler setUserAgent(String userAgent) {
-        crawler.setUserAgent(userAgent);
+        if (headers == null) {
+            headers = new HashMap<>();
+        }
+        headers.put(USER_AGENT, userAgent);
         return this;
     }
 
     @Override
     public WebCrawler setRequestHeader(String key, String value) {
-        crawler.setRequestHeader(key, value);
+        if (headers == null) {
+            headers = new HashMap<>();
+        }
+        headers.put(key, value);
         return this;
     }
 
@@ -71,7 +70,11 @@ class WebCrawlerImpl implements WebCrawler {
         while (url != null && !(pagesVisited.size() > maxPages)) {
             LOGGER.info("Visiting " + url);
             try {
-                Document document = crawler.connect(url).executeRequest();
+                Crawler crawler = Crawler.connect(url);
+                if (headers != null) {
+                    headers.forEach(crawler::setRequestHeader);
+                }
+                Document document = crawler.executeRequest();
                 extractor.extractData(document);
                 Set<String> links = getLinks(document);
                 pagesToVisit.addAll(links);

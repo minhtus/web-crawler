@@ -34,12 +34,13 @@ public class WellFormedUtils {
     }
 
     /**
-     * Remove <script/> <style/> comments and entity references
+     * Remove <script/> <noscript/> <style/> comments and entity references
      * @param src source string need to remove
      * @return removed output from source
      */
     private static String removeMiscellaneousTags(String src) {
         return src.replaceAll("<script[^>]*>([\\s\\S]*?)</script>", "")
+                .replaceAll("<noscript[^>]*>([\\s\\S]*?)</noscript>", "")
                 .replaceAll("<style[^>]*>([\\s\\S]*?)</style>", "")
                 .replaceAll("<!--.*?-->", "")
                 .replaceAll("&.*?;", "");

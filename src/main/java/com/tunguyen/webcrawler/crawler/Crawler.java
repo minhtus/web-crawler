@@ -6,12 +6,12 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-public interface Crawler {
-    Crawler connect(String url) throws IOException;
+public abstract class Crawler {
+    public static Crawler connect(String url) throws IOException {
+        return new CrawlerImpl(url);
+    }
 
-    Crawler setUserAgent(String userAgent);
+    public abstract Crawler setRequestHeader(String key, String value);
 
-    Crawler setRequestHeader(String key, String value);
-
-    Document executeRequest() throws IOException, SAXException, ParserConfigurationException;
+    public abstract Document executeRequest() throws IOException, SAXException, ParserConfigurationException;
 }

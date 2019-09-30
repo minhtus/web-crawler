@@ -21,9 +21,7 @@ public interface Extractor {
                 .filter(link -> {
                     if (link.startsWith("http") || link.startsWith("https")) {
                         return link.startsWith(WebCrawlerFactory.rootPage);
-                    } else {
-                        return true;
-                    }
+                    } else return !link.contains("javascript");
                 })
                 .map(link -> link.startsWith("http") || link.startsWith("https") ? link : WebCrawlerFactory.rootPage + link).collect(Collectors.toSet());
     }

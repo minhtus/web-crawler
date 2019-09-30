@@ -20,12 +20,6 @@ public interface WebCrawler {
     void startCrawler() throws ParserConfigurationException, SAXException, IOException;
 
     /**
-     * User implement crawler
-     * @param crawler Implement crawler from @link com.tunguyen.webcrawler.crawler.Crawler
-     */
-    WebCrawler setCrawler(Crawler crawler);
-
-    /**
      * Set User-Agent to Http Request header
      * @param userAgent user agent value
      */
