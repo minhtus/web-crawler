@@ -11,7 +11,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
@@ -62,13 +61,14 @@ class WebCrawlerImpl implements WebCrawler {
     }
 
     @Override
-    public void startCrawler() throws IOException {
+    public void startCrawler() {
         if (extractor == null) {
             throw new UnsupportedOperationException("Please implement Extractor and add to crawler using addExtractor(extractor)");
         }
         String url = next();
-        while (url != null && !(pagesVisited.size() > maxPages)) {
-            LOGGER.info("Visiting " + url);
+        int visited;
+        while (url != null && !( (visited = pagesVisited.size()) > maxPages)) {
+            LOGGER.info("Visiting " + visited + " " + url);
             try {
                 Crawler crawler = Crawler.connect(url);
                 if (headers != null) {
@@ -78,7 +78,7 @@ class WebCrawlerImpl implements WebCrawler {
                 extractor.extractData(document);
                 Set<String> links = getLinks(document);
                 pagesToVisit.addAll(links);
-            } catch (SAXException | ParserConfigurationException | FileNotFoundException e) {
+            } catch (SAXException | ParserConfigurationException | IOException e) {
                 LOGGER.severe(e.getMessage());
             }
             url = next();
