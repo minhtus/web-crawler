@@ -14,6 +14,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 public class CrawlerImpl extends Crawler {
@@ -36,7 +37,7 @@ public class CrawlerImpl extends Crawler {
 
     @Override
     public Document executeRequest() throws IOException, SAXException, ParserConfigurationException {
-        try (Reader reader = new InputStreamReader(connection.getInputStream())) {
+        try (Reader reader = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8)) {
             StringBuilder builder = new StringBuilder();
             char[] buffer = new char[1024];
             int bytesRead = 0;
