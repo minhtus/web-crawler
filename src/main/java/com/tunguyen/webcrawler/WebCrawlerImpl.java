@@ -75,7 +75,7 @@ class WebCrawlerImpl implements WebCrawler {
                     headers.forEach(crawler::setRequestHeader);
                 }
                 Document document = crawler.executeRequest();
-                extractor.extractData(document);
+                extractor.extractData(url, document);
                 Set<String> links = getLinks(document);
                 pagesToVisit.addAll(links);
             } catch (SAXException | ParserConfigurationException | IOException e) {

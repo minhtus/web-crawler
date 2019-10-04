@@ -11,7 +11,7 @@ public interface Extractor {
      * Parsed document receive from crawler
      * Do business data extracting here
      */
-    void extractData(Document document);
+    void extractData(String url, Document document);
 
     /**
      * Define which URL in all href of website to visit and crawl
