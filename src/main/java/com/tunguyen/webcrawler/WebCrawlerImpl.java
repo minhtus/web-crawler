@@ -66,7 +66,7 @@ class WebCrawlerImpl implements WebCrawler {
             throw new UnsupportedOperationException("Please implement Extractor and add to crawler using addExtractor(extractor)");
         }
         String url = next();
-        int visited;
+        int visited = 0;
         while (url != null && !( (visited = pagesVisited.size()) > maxPages)) {
             LOGGER.info("Visiting " + visited + " " + url);
             try {
@@ -83,6 +83,7 @@ class WebCrawlerImpl implements WebCrawler {
             }
             url = next();
         }
+        LOGGER.info("Finish! Visited: " + visited);
     }
 
     @Override

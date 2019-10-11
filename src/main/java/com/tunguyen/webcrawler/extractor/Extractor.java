@@ -16,13 +16,14 @@ public interface Extractor {
     /**
      * Define which URL in all href of website to visit and crawl
      */
-    default Set<String> extractURL(Set<String> links) {
-        return links.parallelStream()
-                .filter(link -> {
-                    if (link.startsWith("http") || link.startsWith("https")) {
-                        return link.startsWith(WebCrawlerFactory.rootPage);
-                    } else return !link.contains("javascript");
-                })
-                .map(link -> link.startsWith("http") || link.startsWith("https") ? link : WebCrawlerFactory.rootPage + link).collect(Collectors.toSet());
-    }
+    Set<String> extractURL(Set<String> links);
+//    {
+//        return links.parallelStream()
+//                .filter(link -> {
+//                    if (link.startsWith("http") || link.startsWith("https")) {
+//                        return link.startsWith(rootPage);
+//                    } else return !link.contains("javascript");
+//                })
+//                .map(link -> link.startsWith("http") || link.startsWith("https") ? link : WebCrawlerFactory.rootPage + link).collect(Collectors.toSet());
+//    }
 }
